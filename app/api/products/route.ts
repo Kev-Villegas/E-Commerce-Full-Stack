@@ -19,18 +19,30 @@ const createProductSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const validation = createProductSchema.safeParse(body);
-  if (!validation.success)
-    return NextResponse.json(validation.error.errors, { status: 400 });
+  try {
+    const body = await request.json();
+    const parsedBody = {
+      ...body,
+      price: Number(body.price.trim()),
+    };
 
-  const newProduct = await db.product.create({
-    data: {
-      name: body.name,
-      description: body.description,
-      price: body.price,
-    },
-  });
+    const validation = createProductSchema.safeParse(parsedBody);
+    if (!validation.success)
+      return NextResponse.json(validation.error.errors, { status: 400 });
 
-  return NextResponse.json(newProduct, { status: 201 });
+    const newProduct = await db.product.create({
+      data: {
+        name: parsedBody.name,
+        description: parsedBody.description,
+        price: parsedBody.price,
+      },
+    });
+
+    return NextResponse.json(newProduct, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
 }
