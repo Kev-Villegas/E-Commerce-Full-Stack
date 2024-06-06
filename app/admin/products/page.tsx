@@ -13,6 +13,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Pencil } from "lucide-react";
 
 import DeleteDialog from "@/app/_components/DeleteDialog";
+import Link from "next/link";
 // import DeleteDialog from "@/app/_components/DeleteDialog";
 
 const ProductsPage = async () => {
@@ -20,7 +21,9 @@ const ProductsPage = async () => {
   return (
     <div className="p-5">
       <div className="mb-4 flex justify-end px-2">
-        <Button className="">New Product</Button>
+        <Button className="">
+          <Link href="/products/new">New Product</Link>
+        </Button>
       </div>
       <Table>
         <TableCaption>Fenix Products</TableCaption>
