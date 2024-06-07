@@ -18,7 +18,7 @@ interface ProductItemProps {
 
 const ProductItem = ({ product, className }: ProductItemProps) => {
   return (
-    <Card className={cn("", className)}>
+    <Card className={cn("border-[1px] border-stone-400", className)}>
       <CardHeader>
         <CardTitle>{product.name}</CardTitle>
       </CardHeader>
