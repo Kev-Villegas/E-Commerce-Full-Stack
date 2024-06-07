@@ -1,11 +1,10 @@
-import DeleteDialog from "./_components/DeleteDialog";
-// import { Button } from "./_components/ui/button";
+import Search from "./_components/Search";
 
 export default function Home() {
   return (
     <main className="space-y-3 p-5">
+      <Search />
       <div>Hello World</div>
-      <DeleteDialog />
     </main>
   );
 }
