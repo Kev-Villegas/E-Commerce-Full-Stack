@@ -25,7 +25,7 @@ const Search = () => {
   };
 
   return (
-    <form className="mb-4 mt-6 flex gap-2 px-5" onSubmit={handleSearchSubmit}>
+    <form className="mb-4 mt-3 flex gap-2 py-3" onSubmit={handleSearchSubmit}>
       <Input
         placeholder="Find Products..."
         className="border-[1px] border-zinc-700 bg-zinc-300"
