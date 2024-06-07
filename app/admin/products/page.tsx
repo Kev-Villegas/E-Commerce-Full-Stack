@@ -46,12 +46,16 @@ const ProductsPage = async () => {
               <TableCell>${product.price.toFixed(2)}</TableCell>
               <TableCell>
                 <Button className="gap-2">
-                  <Pencil size={17} className="text-slate-500" />
-                  Edit
+                  <Link href={`/products/${product.id}/edit`}>
+                    <div className="flex items-center">
+                      <Pencil size={17} className="mr-2 text-slate-500" />
+                      <span>Edit</span>
+                    </div>
+                  </Link>
                 </Button>
               </TableCell>
               <TableCell>
-                <DeleteDialog />
+                <DeleteDialog productId={product.id} />
               </TableCell>
             </TableRow>
           ))}

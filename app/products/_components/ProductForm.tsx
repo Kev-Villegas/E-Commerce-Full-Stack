@@ -30,10 +30,14 @@ const ProductForm = ({ product }: { product?: Product }) => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
-      if (product) await axios.patch("/api/products/" + product.id, data);
-      else await axios.post("/api/products", data);
-      toast.success("Product added successfully!");
-      router.push("/products");
+      if (product) {
+        await axios.patch("/api/products/" + product.id, data);
+        toast.success("Product edited successfully!");
+      } else {
+        await axios.post("/api/products", data);
+        toast.success("Product created successfully!");
+      }
+      router.push("/admin/products");
     } catch (error) {
       setSubmitting(false);
       console.error("Failed to create product", error);
