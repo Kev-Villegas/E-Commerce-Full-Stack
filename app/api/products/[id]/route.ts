@@ -28,3 +28,21 @@ export async function PATCH(
 
   return NextResponse.json(updatedProduct, { status: 200 });
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const product = await db.product.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!product)
+    return NextResponse.json({ error: "Product not found" }, { status: 404 });
+
+  await db.product.delete({
+    where: { id: product.id },
+  });
+
+  return NextResponse.json({});
+}
