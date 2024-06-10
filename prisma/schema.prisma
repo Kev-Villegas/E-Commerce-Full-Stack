@@ -10,7 +10,7 @@ datasource db {
 model Product {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
+  description String
   price       Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
