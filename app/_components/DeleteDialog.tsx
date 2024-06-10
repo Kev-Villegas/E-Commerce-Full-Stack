@@ -1,6 +1,9 @@
 "use client";
 
 import axios from "axios";
+import { Trash2 } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { Button } from "@/app/_components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,20 +15,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/app/_components/ui/alert-dialog";
-import { Trash2 } from "lucide-react";
-import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { Button } from "@/app/_components/ui/button";
 
-const DeleteDialog = ({ productId }: { productId: number }) => {
-  const router = useRouter();
-
+const DeleteDialog = ({
+  productId,
+  mutate,
+}: {
+  productId: number;
+  mutate: () => void;
+}) => {
   const handleDelete = async () => {
     try {
       await axios.delete("/api/products/" + productId);
       toast.success("Product deleted successfully!");
-      router.push("/admin/products");
-      router.refresh();
+      mutate(); // Here we call the mutate function to revalidate the data
     } catch (error) {
       console.error("Failed to delete product", error);
       toast.error("Failed to delete product.");
