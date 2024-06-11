@@ -23,8 +23,8 @@ model Client {
   email     String   @unique @db.VarChar(255)
   phone     String   @db.VarChar(255)
   address   String   @db.VarChar(255)
-  dni       Int      @unique
-  cuil      Int      @unique
+  dni       BigInt   @unique
+  cuil      BigInt   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
