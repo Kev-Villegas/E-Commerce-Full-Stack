@@ -15,3 +15,16 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  firstName String   @db.VarChar(255)
+  lastName  String   @db.VarChar(255)
+  email     String   @unique @db.VarChar(255)
+  phone     String   @db.VarChar(255)
+  address   String   @db.VarChar(255)
+  dni       String   @unique @db.VarChar(8)
+  cuil      String   @unique @db.Char(11)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
