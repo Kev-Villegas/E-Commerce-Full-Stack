@@ -19,9 +19,8 @@ import {
   TableRow,
 } from "@/app/_components/ui/table";
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 const ProductsPage = () => {
+  const fetcher = (url: string) => axios.get(url).then((res) => res.data);
   const {
     data: products,
     error,
@@ -33,19 +32,30 @@ const ProductsPage = () => {
   });
 
   if (error) {
-    return <div>Failed to load products</div>;
+    return (
+      <div className="p-5">
+        <span className="text-lg font-medium text-red-600">
+          Failed to load the products
+        </span>
+      </div>
+    );
   }
 
   if (!products) {
     return <Spinner />;
   }
 
+  const onDeleteProduct = async (id: number) => {
+    await axios.delete(`/api/products/${id}`);
+    mutate();
+  };
+
   return (
     <div className="p-5">
       <Search />
       <div className="mb-4 flex justify-end px-2">
         <Button>
-          <Link href="/products/new">New Product</Link>
+          <Link href="/products/new">Add New Product</Link>
         </Button>
       </div>
       <Table>
@@ -56,8 +66,6 @@ const ProductsPage = () => {
             <TableHead>Name</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Price</TableHead>
-            <TableHead></TableHead>
-            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -67,7 +75,7 @@ const ProductsPage = () => {
               <TableCell>{product.name}</TableCell>
               <TableCell>{product.description}</TableCell>
               <TableCell>${product.price.toFixed(2)}</TableCell>
-              <TableCell>
+              <TableCell className="w-[125px]">
                 <Button className="gap-2">
                   <Link href={`/products/${product.id}/edit`}>
                     <div className="flex items-center">
@@ -77,8 +85,15 @@ const ProductsPage = () => {
                   </Link>
                 </Button>
               </TableCell>
-              <TableCell>
-                <DeleteDialog productId={product.id} mutate={mutate} />
+              <TableCell className="w-[125px]">
+                <DeleteDialog
+                  itemType="Product"
+                  title="Delete Product"
+                  deleteButtonLabel="Delete"
+                  alertDialogCancelText="Cancel"
+                  onClickDeleteItem={() => onDeleteProduct(product.id)}
+                  description="Are you sure you want to delete this product?"
+                />
               </TableCell>
             </TableRow>
           ))}

@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/app/_components/ui/button";
@@ -16,21 +15,30 @@ import {
   AlertDialogTrigger,
 } from "@/app/_components/ui/alert-dialog";
 
+interface DeleteDialogProps {
+  title: string;
+  itemType: string;
+  description: string;
+  deleteButtonLabel: string;
+  alertDialogCancelText: string;
+  onClickDeleteItem: () => Promise<void>;
+}
+
 const DeleteDialog = ({
-  productId,
-  mutate,
-}: {
-  productId: number;
-  mutate: () => void;
-}) => {
+  title,
+  itemType,
+  onClickDeleteItem,
+  description,
+  deleteButtonLabel,
+  alertDialogCancelText,
+}: DeleteDialogProps) => {
   const handleDelete = async () => {
     try {
-      await axios.delete("/api/products/" + productId);
-      toast.success("Product deleted successfully!");
-      mutate(); // Here we call the mutate function to revalidate the data
+      await onClickDeleteItem();
+      toast.success(`${itemType} deleted successfully!`);
     } catch (error) {
-      console.error("Failed to delete product", error);
-      toast.error("Failed to delete product.");
+      console.error(`Failed to delete the ${itemType}`, error);
+      toast.error(`Failed to delete the ${itemType}.`);
     }
   };
 
@@ -39,23 +47,25 @@ const DeleteDialog = ({
       <AlertDialogTrigger asChild>
         <Button className="gap-3" variant="destructive">
           <Trash2 size={17} className="group-hover:font-bold" />
-          Delete
+          {deleteButtonLabel}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="bg-slate-200">
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to remove this product from the database?
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently remove the
-            product from your database.
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription className="font-medium text-slate-900">
+            {description}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="bg-gray-300">Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-red-600" onClick={handleDelete}>
-            Delete
+          <AlertDialogCancel className="bg-gray-300 font-semibold text-[#0c2024] hover:bg-gray-400">
+            {alertDialogCancelText}
+          </AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-red-600 hover:bg-red-800"
+            onClick={handleDelete}
+          >
+            {deleteButtonLabel}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
