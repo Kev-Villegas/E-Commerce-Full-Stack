@@ -3,6 +3,7 @@
 import { db } from "@/app/_lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { clientSchema } from "@/app/_utils/validationSchemas";
+import { convertBigIntToNumber } from "@/app/_utils/convertBigIntToNumber";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -22,4 +23,20 @@ export async function POST(request: NextRequest) {
     },
   });
   return NextResponse.json(newClient, { status: 201 });
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const clients = await db.client.findMany();
+    const clientsWithNumberBigInts = clients.map((client) =>
+      convertBigIntToNumber(client),
+    );
+    return NextResponse.json(clientsWithNumberBigInts, { status: 200 });
+  } catch (error) {
+    console.error("Failed to fetch clients", error);
+    return NextResponse.json(
+      { error: "Failed to fetch clients" },
+      { status: 500 },
+    );
+  }
 }
