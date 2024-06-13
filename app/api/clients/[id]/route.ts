@@ -32,3 +32,21 @@ export async function PATCH(
 
   return NextResponse.json(updatedClient, { status: 200 });
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const client = await db.client.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!client)
+    return NextResponse.json({ error: "Client not found" }, { status: 404 });
+
+  await db.client.delete({
+    where: { id: client.id },
+  });
+
+  return NextResponse.json({});
+}
