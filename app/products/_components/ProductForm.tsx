@@ -70,6 +70,7 @@ const ProductForm = ({ product }: { product?: Product }) => {
         type="number"
         step="0.01"
         placeholder="Product Price"
+        defaultValue={product?.price}
         className="border-[1px] border-zinc-800"
         {...register("price", { valueAsNumber: true })}
       />
