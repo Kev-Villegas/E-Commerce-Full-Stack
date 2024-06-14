@@ -22,7 +22,9 @@ export async function POST(request: NextRequest) {
       cuil: body.cuil,
     },
   });
-  return NextResponse.json(newClient, { status: 201 });
+
+  const clientWithBigIntsToNumbers = convertBigIntToNumber(newClient);
+  return NextResponse.json(clientWithBigIntsToNumbers, { status: 201 });
 }
 
 export async function GET(request: NextRequest) {
