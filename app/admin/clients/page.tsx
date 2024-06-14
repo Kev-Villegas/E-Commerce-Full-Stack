@@ -55,7 +55,7 @@ const ClientsPage = () => {
       <Search />
       <div className="mb-4 flex justify-end px-2">
         <Button>
-          <Link href="/clients/new">Add New Product</Link>
+          <Link href="/clients/new">Add New Client</Link>
         </Button>
       </div>
       <Table>
