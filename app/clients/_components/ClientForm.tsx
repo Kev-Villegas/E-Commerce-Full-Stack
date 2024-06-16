@@ -13,6 +13,7 @@ import { Button } from "@/app/_components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { clientSchema } from "@/app/_utils/validationSchemas";
 import { convertBigIntToNumber } from "@/app/_utils/convertBigIntToNumber";
+import { Label } from "@/app/_components/ui/label";
 
 type ClientFormData = z.infer<typeof clientSchema>;
 
@@ -50,86 +51,84 @@ const ClientForm = ({ client }: { client?: Client }) => {
   const clientWithNumbers = client ? convertBigIntToNumber(client) : undefined;
 
   return (
-    <form className="max-w-xl space-y-5 p-5" onSubmit={onSubmit}>
-      <h3 className="flex justify-center text-center">Add A New Client</h3>
+    <form className="max-w-xl p-5" onSubmit={onSubmit}>
+      <h3 className="mb-3 flex justify-center text-center font-medium">
+        Add A New Client
+      </h3>
 
+      <Label className="text-base font-normal">Client First Name</Label>
       <Input
         type="text"
         defaultValue={client?.firstName}
         placeholder="Client First Name"
-        className="border-[1px] border-zinc-800"
+        className="mb-4 mt-1 border-[1px] border-zinc-800"
         {...register("firstName")}
       />
       {errors.firstName && (
         <p className="text-red-500">{errors.firstName.message}</p>
       )}
-
+      <Label className="text-base font-normal">Client Last Name</Label>
       <Input
         type="text"
         defaultValue={client?.lastName}
         placeholder="Client Last Name"
-        className="border-[1px] border-zinc-800"
+        className="mb-4 mt-[2px] border-[1px] border-zinc-800"
         {...register("lastName")}
       />
-
       {errors.lastName && (
         <p className="text-red-500">{errors.lastName.message}</p>
       )}
-
+      <Label className="text-base font-normal">Client Email</Label>
       <Input
         type="email"
         defaultValue={client?.email}
         placeholder="Client Email"
-        className="border-[1px] border-zinc-800"
+        className="mb-4 mt-[2px] border-[1px] border-zinc-800"
         {...register("email")}
       />
-
       {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-
+      <Label className="text-base font-normal">Client Phone</Label>
       <Input
         type="text"
         defaultValue={client?.phone}
         placeholder="Client Phone"
-        className="border-[1px] border-zinc-800"
+        className="mb-4 mt-[2px] border-[1px] border-zinc-800"
         {...register("phone")}
       />
-
       {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
-
+      <Label className="text-base font-normal">Client Address</Label>
       <Input
         type="text"
         placeholder="Client Address"
         defaultValue={client?.address}
-        className="border-[1px] border-zinc-800"
+        className="mb-4 mt-[2px] border-[1px] border-zinc-800"
         {...register("address")}
       />
-
       {errors.address && (
         <p className="text-red-500">{errors.address.message}</p>
       )}
-
+      <Label className="text-base font-normal">Client DNI</Label>
       <Input
         type="number"
         step="0.01"
         placeholder="Client DNI"
         defaultValue={clientWithNumbers?.dni}
-        className="border-[1px] border-zinc-800"
+        className="mb-4 mt-[2px] border-[1px] border-zinc-800"
         {...register("dni", { valueAsNumber: true })}
       />
-
-      {errors.dni && <p className="text-red-500">{errors.dni.message}</p>}
-
+      {errors.dni && (
+        <p className="mt-0 py-0 text-red-500">{errors.dni.message}</p>
+      )}
+      <Label className="text-base font-normal">Client Cuil</Label>
       <Input
         type="number"
         step="0.01"
         placeholder="Client Cuil"
         defaultValue={clientWithNumbers?.cuil}
-        className="border-[1px] border-zinc-800"
+        className="mb-4 mt-[2px] border-[1px] border-zinc-800"
         {...register("cuil", { valueAsNumber: true })}
       />
-
       {errors.cuil && <p className="text-red-500">{errors.cuil.message}</p>}
-
       <Button disabled={isSubmitting} type="submit" className="gap-2">
         {client ? "Update Client" : "Add Client"} {isSubmitting && <Spinner />}
       </Button>
