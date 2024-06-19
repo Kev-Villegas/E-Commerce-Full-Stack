@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 export const productSchema = z.object({
+  image: z
+    .unknown({ required_error: "Image is required!" })
+    .transform((value) => {
+      return value as FileList;
+    }),
   name: z
     .string()
     .min(3, { message: "Product Name must be at least 3 characters!" })
