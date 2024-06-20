@@ -3,10 +3,11 @@
 import useSWR from "swr";
 import axios from "axios";
 import Link from "next/link";
-import { Pencil } from "lucide-react";
+import { useState } from "react";
 import { Client } from "@prisma/client";
 import Search from "@/app/_components/Search";
 import Spinner from "@/app/_components/Spinner";
+import { Pencil, ListFilter } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import DeleteDialog from "@/app/_components/DeleteDialog";
 import {
@@ -31,11 +32,17 @@ const ClientsPage = () => {
     revalidateOnReconnect: true,
   });
 
+  const [sortedClients, setSortedClients] = useState<Client[]>([]);
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof Client;
+    order: "asc" | "desc";
+  }>({ key: "id", order: "asc" });
+
   if (error) {
     return (
       <div className="p-5">
         <span className="text-lg font-medium text-red-600">
-          Failed to load the clients
+          Failed to load the clients...
         </span>
       </div>
     );
@@ -50,6 +57,20 @@ const ClientsPage = () => {
     mutate();
   };
 
+  const handleSort = (key: keyof Client) => {
+    const order =
+      sortConfig.key === key && sortConfig.order === "asc" ? "desc" : "asc";
+    const sorted = [...clients].sort((a, b) => {
+      if (a[key] < b[key]) return order === "asc" ? -1 : 1;
+      if (a[key] > b[key]) return order === "asc" ? 1 : -1;
+      return 0;
+    });
+    setSortedClients(sorted);
+    setSortConfig({ key, order });
+  };
+
+  const displayedClients = sortedClients.length ? sortedClients : clients;
+
   return (
     <div className="p-5">
       <Search />
@@ -62,18 +83,90 @@ const ClientsPage = () => {
         <TableCaption>Fenix Clients</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>First Name</TableHead>
-            <TableHead>Last Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Address</TableHead>
-            <TableHead>DNI</TableHead>
-            <TableHead>Cuil</TableHead>
+            <TableHead className="w-[80px]">
+              <span className="flex gap-2">
+                <ListFilter
+                  className="cursor-pointer"
+                  size={20}
+                  onClick={() => handleSort("id")}
+                />
+                ID
+              </span>
+            </TableHead>
+            <TableHead>
+              <span className="flex gap-2">
+                <ListFilter
+                  className="cursor-pointer"
+                  size={20}
+                  onClick={() => handleSort("firstName")}
+                />
+                First Name
+              </span>
+            </TableHead>
+            <TableHead>
+              <span className="flex gap-2">
+                <ListFilter
+                  className="cursor-pointer"
+                  size={20}
+                  onClick={() => handleSort("lastName")}
+                />
+                Last Name
+              </span>
+            </TableHead>
+            <TableHead>
+              <span className="flex gap-2">
+                <ListFilter
+                  className="cursor-pointer"
+                  size={20}
+                  onClick={() => handleSort("email")}
+                />
+                Email
+              </span>
+            </TableHead>
+            <TableHead>
+              <span className="flex gap-2">
+                <ListFilter
+                  className="cursor-pointer"
+                  size={20}
+                  onClick={() => handleSort("phone")}
+                />
+                Phone
+              </span>
+            </TableHead>
+            <TableHead>
+              <span className="flex gap-2">
+                <ListFilter
+                  className="cursor-pointer"
+                  size={20}
+                  onClick={() => handleSort("address")}
+                />
+                Address
+              </span>
+            </TableHead>
+            <TableHead>
+              <span className="flex gap-2">
+                <ListFilter
+                  className="cursor-pointer"
+                  size={20}
+                  onClick={() => handleSort("dni")}
+                />
+                DNI
+              </span>
+            </TableHead>
+            <TableHead>
+              <span className="flex gap-2">
+                <ListFilter
+                  className="cursor-pointer"
+                  size={20}
+                  onClick={() => handleSort("cuil")}
+                />
+                Cuil
+              </span>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {clients.map((client) => (
+          {displayedClients.map((client) => (
             <TableRow key={client.id}>
               <TableCell className="font-medium">{client.id}</TableCell>
               <TableCell>{client.firstName}</TableCell>
