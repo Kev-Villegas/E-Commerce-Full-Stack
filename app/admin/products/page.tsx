@@ -55,7 +55,7 @@ const ProductsPage = () => {
       <Search />
       <div className="mb-4 flex justify-end px-2">
         <Button>
-          <Link href="/products/new">Add New Product</Link>
+          <Link href="/admin/products/new">Add New Product</Link>
         </Button>
       </div>
       <Table>

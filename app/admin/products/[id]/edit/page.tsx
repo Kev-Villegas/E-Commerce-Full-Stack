@@ -1,5 +1,5 @@
 import { db } from "@/app/_lib/prisma";
-import ProductForm from "../../_components/ProductForm";
+import ProductForm from "../../../_components/ProductForm";
 import { notFound } from "next/navigation";
 
 interface ProductEditProps {

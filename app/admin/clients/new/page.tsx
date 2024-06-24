@@ -1,5 +1,5 @@
 import React from "react";
-import ClientForm from "../_components/ClientForm";
+import ClientForm from "../../_components/ClientForm";
 
 const NewClientPage = () => {
   return <ClientForm />;

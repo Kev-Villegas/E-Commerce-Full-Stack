@@ -76,7 +76,7 @@ const ClientsPage = () => {
       <Search />
       <div className="mb-4 flex justify-end px-2">
         <Button>
-          <Link href="/clients/new">Add New Client</Link>
+          <Link href="/admin/clients/new">Add New Client</Link>
         </Button>
       </div>
       <Table>

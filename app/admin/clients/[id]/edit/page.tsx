@@ -1,6 +1,6 @@
 import { db } from "@/app/_lib/prisma";
 import { notFound } from "next/navigation";
-import ClientForm from "../../_components/ClientForm";
+import ClientForm from "../../../_components/ClientForm";
 
 interface ClientEditProps {
   params: {
