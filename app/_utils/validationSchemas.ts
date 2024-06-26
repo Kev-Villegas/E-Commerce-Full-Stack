@@ -1,28 +1,27 @@
 import { z } from "zod";
 
+const fileSchema = z.instanceof(File, { message: "Required" });
+const imageSchema = fileSchema.refine(
+  (file) => file.size === 0 || file.type.startsWith("image/"),
+);
+
 export const productSchema = z.object({
-  image: z
-    .unknown({ required_error: "Image is required!" })
-    .transform((value) => {
-      return value as FileList;
-    }),
   name: z
     .string()
     .min(3, { message: "Product Name must be at least 3 characters!" })
     .max(255, { message: "Product Name must be at most 255 characters!" }),
   description: z
     .string()
-    .min(12, {
-      message: "Description must be at least 12 characters!",
-    })
-    .max(255, {
-      message: "Description must be at most 255 characters!",
-    }),
+    .min(12, { message: "Description must be at least 12 characters!" })
+    .max(255, { message: "Description must be at most 255 characters!" }),
   price: z
     .number({ message: "Price must be a number!" })
     .positive({ message: "Price must be a positive number!" })
     .min(6, { message: "The minimum price required to upload a product is 6" })
     .max(999, { message: "The maximum price allowed is 999" }),
+  image: imageSchema.refine((file) => file.size > 0, {
+    message: "File is required!",
+  }),
 });
 
 export const clientSchema = z.object({
