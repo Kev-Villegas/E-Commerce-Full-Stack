@@ -1,91 +1,147 @@
+/*eslint-disable no-unused-vars*/
 "use client";
 
-import { z } from "zod";
 import axios from "axios";
-import React, { useState } from "react";
-import { toast } from "react-hot-toast";
-import { Product } from "@prisma/client";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Spinner from "@/app/_components/Spinner";
 import { Input } from "@/app/_components/ui/input";
-import { Button } from "@/app/_components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { productSchema } from "@/app/_utils/validationSchemas";
 import { Label } from "@/app/_components/ui/label";
+import { useRef, useState, useEffect } from "react";
+import { Button } from "@/app/_components/ui/button";
+import { useRouter, useParams } from "next/navigation";
 
-type ProductFormData = z.infer<typeof productSchema>;
-
-const ProductForm = ({ product }: { product?: Product }) => {
+const ProductForm = () => {
+  const router = useRouter();
+  const params = useParams();
+  const form = useRef<HTMLFormElement>(null);
+  const [product, setProduct] = useState({
+    name: "",
+    price: "",
+    description: "",
+  });
+  const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ProductFormData>({
-    resolver: zodResolver(productSchema),
-  });
+  useEffect(() => {
+    if (params.id) {
+      axios.get("/api/products/" + params.id).then((res) => {
+        setProduct({
+          name: res.data.name,
+          price: res.data.price,
+          description: res.data.description,
+        });
+      });
+    }
+  }, []);
 
-  const onSubmit = handleSubmit(async (data) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setProduct({
+      ...product,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", product.name);
+    formData.append("description", product.description);
+    formData.append("price", product.price.toString());
+
+    if (file) {
+      formData.append("image", file);
+    }
+
     try {
-      setSubmitting(true);
-      if (product) {
-        await axios.patch("/api/products/" + product.id, data);
-        toast.success("Product edited successfully!");
+      if (!params.id) {
+        await axios.post("/api/products", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       } else {
-        await axios.post("/api/products", data);
-        toast.success("Product created successfully!");
+        await axios.put("/api/products/" + params.id, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       }
+      form.current?.reset();
+      router.refresh();
       router.push("/admin/products");
     } catch (error) {
-      setSubmitting(false);
-      console.error("Failed to create product", error);
-      toast.error("Failed to add product.");
+      console.error("Failed to create or update product:", error);
     }
-  });
+  };
 
   return (
-    <form className="max-w-xl p-5" onSubmit={onSubmit}>
-      <h3 className="flex justify-center text-center font-medium">
-        Add A New Product
-      </h3>
-      <Label className="text-base">Product Name</Label>
-      <Input
-        type="text"
-        defaultValue={product?.name}
-        placeholder="Product Name"
-        className="mb-5 mt-[2px] border-[1px] border-zinc-800"
-        {...register("name")}
-      />
-      {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-      <Label className="text-base">Product Description</Label>
-      <Input
-        type="text"
-        placeholder="Product Description"
-        defaultValue={product?.description!}
-        className="mb-5 mt-[2px] border-[1px] border-zinc-800"
-        {...register("description")}
-      />
-      {errors.description && (
-        <p className="text-red-500">{errors.description.message}</p>
-      )}
-      <Label className="text-base">Product Price</Label>
-      <Input
-        type="number"
-        step="0.01"
-        placeholder="Product Price"
-        defaultValue={product?.price}
-        className="mb-3 mt-[2px] border-[1px] border-zinc-800"
-        {...register("price", { valueAsNumber: true })}
-      />
-      {errors.price && <p className="text-red-500">{errors.price.message}</p>}
-      <Button disabled={isSubmitting} type="submit" className="gap-2">
-        {product ? "Update Product" : "Add Product"}{" "}
-        {isSubmitting && <Spinner />}
-      </Button>
-    </form>
+    <div className="flex">
+      <form
+        className="mb-4 rounded-md bg-white px-8 pb-8 pt-6 shadow-md"
+        onSubmit={handleSubmit}
+        ref={form}
+      >
+        <Label>Product Name</Label>
+        <Input
+          className="mb-5 mt-[2px] border-[1px] border-zinc-800"
+          placeholder="Product Name..."
+          onChange={handleChange}
+          value={product.name}
+          name="name"
+          type="text"
+          autoFocus
+        />
+        <Label>Product Description</Label>
+        <Input
+          className="mb-5 mt-[2px] border-[1px] border-zinc-800"
+          placeholder="Product Description..."
+          value={product.description}
+          onChange={handleChange}
+          name="description"
+          type="text"
+        />
+        <Label>Product Price</Label>
+        <Input
+          className="mb-5 mt-[2px] border-[1px] border-zinc-800"
+          placeholder="Product Price..."
+          onChange={handleChange}
+          value={product.price}
+          type="number"
+          name="price"
+          step="0.01"
+        />
+        <Label>Product Image</Label>
+        <Input
+          className="mb-5 mt-[2px] border-[1px] border-zinc-800"
+          placeholder="Product Description..."
+          onChange={handleFileChange}
+          name="image"
+          type="file"
+        />
+
+        {file && (
+          <Image
+            className="mx-auto my-4 w-96 object-contain"
+            src={URL.createObjectURL(file)}
+            alt=""
+            width={200}
+            height={200}
+          />
+        )}
+        <Button disabled={isSubmitting} type="submit" className="gap-2">
+          {params.id ? "Update Product" : "Create Product"}{" "}
+          {isSubmitting && <Spinner />}
+        </Button>
+      </form>
+    </div>
   );
 };
 
