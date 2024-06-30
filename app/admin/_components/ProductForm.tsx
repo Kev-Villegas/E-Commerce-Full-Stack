@@ -32,7 +32,7 @@ const ProductForm = () => {
         });
       });
     }
-  }, []);
+  }, [params.id]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
