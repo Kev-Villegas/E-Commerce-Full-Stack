@@ -18,7 +18,7 @@ const EditProductPage = async ({ params }: ProductEditProps) => {
   if (!product) {
     return notFound();
   }
-  return <ProductForm product={product} />;
+  return <ProductForm />;
 };
 
 export default EditProductPage;
