@@ -68,21 +68,21 @@ const ProductForm = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        toast.success("Producto creado exitosamente!");
+        toast.success("Product created successfully!");
       } else {
         await axios.patch("/api/products/" + params.id, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        toast.success("Producto editado exitosamente!");
+        toast.success("Product edited successfully!");
       }
       form.current?.reset();
       router.refresh();
       router.push("/admin/products");
     } catch (error) {
       console.error("Failed to create or update product:", error);
-      toast.error("Error al crear o editar el producto.");
+      toast.error("Failed to create or update product.");
     }
   };
 
