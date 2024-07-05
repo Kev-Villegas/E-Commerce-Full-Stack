@@ -77,7 +77,7 @@ const ProductsPage = () => {
               <TableCell>${product.price.toFixed(2)}</TableCell>
               <TableCell className="w-[125px]">
                 <Button className="gap-2">
-                  <Link href={`/products/${product.id}/edit`}>
+                  <Link href={`/admin/products/${product.id}/edit`}>
                     <div className="flex items-center">
                       <Pencil size={17} className="mr-2 text-slate-500" />
                       <span>Edit</span>
