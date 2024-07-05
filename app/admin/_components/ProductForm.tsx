@@ -3,6 +3,7 @@
 
 import axios from "axios";
 import Image from "next/image";
+import toast from "react-hot-toast";
 import Spinner from "@/app/_components/Spinner";
 import { Input } from "@/app/_components/ui/input";
 import { Label } from "@/app/_components/ui/label";
@@ -67,18 +68,21 @@ const ProductForm = () => {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Producto creado exitosamente!");
       } else {
-        await axios.put("/api/products/" + params.id, formData, {
+        await axios.patch("/api/products/" + params.id, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Producto editado exitosamente!");
       }
       form.current?.reset();
       router.refresh();
       router.push("/admin/products");
     } catch (error) {
       console.error("Failed to create or update product:", error);
+      toast.error("Error al crear o editar el producto.");
     }
   };
 
