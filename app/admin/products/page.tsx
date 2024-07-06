@@ -5,7 +5,6 @@ import axios from "axios";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 import { Product } from "@prisma/client";
-import Search from "@/app/_components/Search";
 import Spinner from "@/app/_components/Spinner";
 import { Button } from "@/app/_components/ui/button";
 import DeleteDialog from "@/app/_components/DeleteDialog";
@@ -52,7 +51,6 @@ const ProductsPage = () => {
 
   return (
     <div className="p-5">
-      <Search />
       <div className="mb-4 flex justify-end px-2">
         <Button>
           <Link href="/admin/products/new">Add New Product</Link>
