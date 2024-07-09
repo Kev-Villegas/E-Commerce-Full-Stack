@@ -1,9 +1,12 @@
 import { z } from "zod";
 
-const fileSchema = z.instanceof(File, { message: "Required" });
-const imageSchema = fileSchema.refine(
-  (file) => file.size === 0 || file.type.startsWith("image/"),
-);
+const imageMaxUploadSize = 1024 * 1024 * 3; // 3mb
+const acceptedImageTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 
 export const productSchema = z.object({
   name: z
@@ -19,9 +22,17 @@ export const productSchema = z.object({
     .positive({ message: "Price must be a positive number!" })
     .min(6, { message: "The minimum price required to upload a product is 6" })
     .max(999, { message: "The maximum price allowed is 999" }),
-  image: imageSchema.refine((file) => file.size > 0, {
-    message: "File is required!",
-  }),
+  image: z
+    .any()
+    .refine((files) => files?.length >= 1, { message: "Image is required." })
+    .refine(
+      (files) => files?.[0]?.size <= imageMaxUploadSize,
+      "Max image size is 3MB.",
+    )
+    .refine(
+      (files) => acceptedImageTypes.includes(files?.[0]?.type),
+      "Only .jpeg, .jpg, .png and .webp images are allowed.",
+    ),
 });
 
 export const clientSchema = z.object({
