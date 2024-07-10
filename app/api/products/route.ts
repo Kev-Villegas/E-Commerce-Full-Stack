@@ -5,14 +5,14 @@ import { writeFile } from "fs/promises";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
-export async function POST(request: any) {
+export async function POST(request: NextRequest) {
   try {
     const data = await request.formData();
     const image = data.get("image");
 
-    if (!image) {
+    if (!image || typeof image === "string") {
       return NextResponse.json(
-        { error: "No image received." },
+        { error: "No image received or image is not valid." },
         { status: 400 },
       );
     }
@@ -22,7 +22,9 @@ export async function POST(request: any) {
 
     const originalFileName = image.name;
     const extension = path.extname(originalFileName);
-    const uniqueFileName = `${uuidv4()}${Date.now()}${Math.random().toString(36).substring(2, 15)}${extension}`;
+    const uniqueFileName = `${uuidv4()}${Date.now()}${Math.random()
+      .toString(36)
+      .substring(2, 15)}${extension}`;
     const filePath = path.join(
       process.cwd(),
       "public",
