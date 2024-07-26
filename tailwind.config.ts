@@ -10,18 +10,16 @@ const config = {
   ],
   prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        sm: "480px", // Mobile ≤ 480px
-        md: "768px", // Mobile ≤ 768px
-        lg: "834px", // Tablet ≤ 834px
-        xl: "1024px", // Tablet ≤ 1024px
-        "2xl": "1440px", // Laptop ≤ 1440px
-        "3xl": "1600px", // Desktop ≥ 1600px
-      },
+    screens: {
+      xs: "380", // Mobile ≤ 380px
+      sm: "480px", // Mobile ≤ 480px
+      md: "768px", // Mobile ≤ 768px
+      lg: "834px", // Tablet ≤ 834px
+      xl: "1024px", // Tablet ≤ 1024px
+      "2xl": "1440px", // Laptop ≤ 1440px
+      "3xl": "1600px", // Desktop ≥ 1600px
     },
+
     extend: {
       colors: {
         border: "hsl(var(--border))",
