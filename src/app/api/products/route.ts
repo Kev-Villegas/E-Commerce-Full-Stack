@@ -1,9 +1,16 @@
 /*eslint-disable no-unused-vars*/
 import path from "path";
+import { v4 as uuidv4 } from "uuid";
 import { db } from "@/src/_lib/prisma";
 import { writeFile } from "fs/promises";
+import { v2 as cloudinary } from "cloudinary";
 import { NextRequest, NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,12 +42,14 @@ export async function POST(request: NextRequest) {
     await writeFile(filePath, buffer);
 
     const price = parseFloat(data.get("price") as string);
+
+    const cloudResponse = await cloudinary.uploader.upload(filePath);
     const newProduct = await db.product.create({
       data: {
         name: data.get("name") as string,
         description: data.get("description") as string,
         price: price,
-        imagePath: `/upload/products/${uniqueFileName}`,
+        imagePath: `${cloudResponse.secure_url}`,
       },
     });
     return NextResponse.json(newProduct, { status: 201 });
