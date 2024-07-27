@@ -15,6 +15,7 @@ cloudinary.config({
 export async function POST(request: NextRequest) {
   try {
     const data = await request.formData();
+    const price = parseFloat(data.get("price") as string);
     const image = data.get("image");
 
     if (!image || typeof image === "string") {
@@ -32,24 +33,34 @@ export async function POST(request: NextRequest) {
     const uniqueFileName = `${uuidv4()}${Date.now()}${Math.random()
       .toString(36)
       .substring(2, 15)}${extension}`;
-    const filePath = path.join(
-      process.cwd(),
-      "public",
-      "upload",
-      "products",
-      uniqueFileName,
+
+    const imageResponse = await new Promise<{ secure_url: string }>(
+      (resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              folder: "fenix-app-images",
+              filename_override: uniqueFileName,
+              unique_filename: true,
+              public_id: uniqueFileName,
+            },
+            (error, result) => {
+              if (result) {
+                resolve(result);
+              } else {
+                reject(new Error("Image upload failed"));
+              }
+            },
+          )
+          .end(buffer);
+      },
     );
-    await writeFile(filePath, buffer);
-
-    const price = parseFloat(data.get("price") as string);
-
-    const cloudResponse = await cloudinary.uploader.upload(filePath);
     const newProduct = await db.product.create({
       data: {
         name: data.get("name") as string,
         description: data.get("description") as string,
         price: price,
-        imagePath: `${cloudResponse.secure_url}`,
+        imagePath: `${imageResponse.secure_url}`,
       },
     });
     return NextResponse.json(newProduct, { status: 201 });
