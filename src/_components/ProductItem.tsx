@@ -9,7 +9,10 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  CardContent,
 } from "@/src/_components/ui/card";
+import { Separator } from "./ui/separator";
+import { ShoppingCart } from "lucide-react";
 
 interface ProductItemProps {
   product: Product;
@@ -18,31 +21,45 @@ interface ProductItemProps {
 
 const ProductItem = ({ product }: ProductItemProps) => {
   return (
-    <Card className="mx-auto flex h-[280px] w-min min-w-[200px] flex-col bg-zinc-950">
-      <CardHeader className="flex flex-1 flex-col">
-        <div className="w-full">
+    <Card className="mx-auto flex h-full w-full max-w-xs flex-col rounded-xl border border-white/25 bg-zinc-950">
+      <CardHeader className="relative h-48 w-full overflow-hidden rounded-t-xl">
+        <Link href={`/products/${product.id}`}>
           <Image
             src={product.imagePath!}
             alt={product.name}
             quality={90}
-            width={185}
-            height={100}
-            className="mb-2 w-full rounded-b-lg rounded-t-xl"
+            layout="fill"
+            objectFit="cover"
+            className="mb-2 rounded-b-md"
           />
-        </div>
-        <CardTitle className="flex px-1 py-1 text-slate-200">
-          <span>{product.name}</span>
-        </CardTitle>
-        <CardDescription className="px-1 text-slate-400">
-          <span>{product.description}</span>
-        </CardDescription>
+        </Link>
       </CardHeader>
-      <CardFooter className="flex justify-between px-1">
-        <h3 className="justify-end p-1 text-base font-medium text-slate-300">
+      <CardContent className="flex flex-1 flex-col p-[6px]">
+        <CardTitle className="break-words text-slate-200">
+          <Link
+            href={`/products/${product.id}`}
+            className="cursor-pointer transition-all duration-300 hover:text-blue-800"
+          >
+            {product.name}
+          </Link>
+        </CardTitle>
+        <Separator className="mb-1 mt-2" />
+        <CardDescription className="line-clamp-3 break-words text-slate-400">
+          {product.description}
+        </CardDescription>
+      </CardContent>
+      <CardFooter className="flex justify-between p-2">
+        <h3 className="items-start text-base font-medium text-slate-300">
           ${product.price}
         </h3>
-        <Button className="w-fit" size="sm">
-          <Link href={`/products/${product.id}`}>View Product</Link>
+        <Button
+          className="w-fit bg-slate-300 p-2 hover:bg-zinc-800 hover:text-zinc-100"
+          size="icon"
+          asChild
+        >
+          <Link className="text-stone-900" href={`/products/${product.id}`}>
+            <ShoppingCart />
+          </Link>
         </Button>
       </CardFooter>
     </Card>
