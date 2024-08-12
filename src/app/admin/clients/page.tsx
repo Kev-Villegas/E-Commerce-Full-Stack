@@ -176,7 +176,7 @@ const ClientsPage = () => {
               <TableCell>{client.cuil}</TableCell>
               <TableCell className="w-[110px]">
                 <Button className="gap-2">
-                  <Link href={`/clients/${client.id}/edit`}>
+                  <Link href={`/admin/clients/${client.id}/edit`}>
                     <div className="flex items-center">
                       <Pencil size={17} className="mr-2 text-slate-500" />
                       <span>Edit</span>
