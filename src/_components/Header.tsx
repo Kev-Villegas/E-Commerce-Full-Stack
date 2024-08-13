@@ -25,6 +25,9 @@ import Search from "./Search";
 const Header = () => {
   const [hidden, setHidden] = useState<boolean>(false);
 
+  const toggleHidden = () => {
+    setHidden(!hidden);
+  };
   return (
     <header className="flex justify-between px-5 pt-6">
       <div className="relative h-[30px] w-[100px]">
@@ -74,7 +77,7 @@ const Header = () => {
                 className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
                 asChild
               >
-                <Link href="/" onClick={() => setHidden(!hidden)}>
+                <Link href="/" onClick={toggleHidden}>
                   <HomeIcon size={16} />
                   <span className="block">Home</span>
                 </Link>
@@ -85,10 +88,7 @@ const Header = () => {
                   className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
                   asChild
                 >
-                  <Link
-                    href="/admin/products"
-                    onClick={() => setHidden(!hidden)}
-                  >
+                  <Link href="/admin/products" onClick={toggleHidden}>
                     <PackageSearch size={18} />
                     <span className="block">Manage Products</span>
                   </Link>
@@ -99,10 +99,7 @@ const Header = () => {
                   className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
                   asChild
                 >
-                  <Link
-                    href="/admin/clients"
-                    onClick={() => setHidden(!hidden)}
-                  >
+                  <Link href="/admin/clients" onClick={toggleHidden}>
                     <UserRoundSearch size={18} />
                     <span className="block">Manage Clients</span>
                   </Link>
