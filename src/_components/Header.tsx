@@ -19,9 +19,12 @@ import {
   Bitcoin,
   UserRoundSearch,
 } from "lucide-react";
+import { useState } from "react";
 import Search from "./Search";
 
 const Header = () => {
+  const [hidden, setHidden] = useState<boolean>(false);
+
   return (
     <header className="flex justify-between px-5 pt-6">
       <div className="relative h-[30px] w-[100px]">
@@ -33,7 +36,7 @@ const Header = () => {
         <Search />
       </div>
       <div>
-        <Sheet>
+        <Sheet open={hidden} onOpenChange={setHidden}>
           <SheetTrigger asChild>
             <Button
               size="icon"
@@ -71,7 +74,7 @@ const Header = () => {
                 className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
                 asChild
               >
-                <Link href="/">
+                <Link href="/" onClick={() => setHidden(!hidden)}>
                   <HomeIcon size={16} />
                   <span className="block">Home</span>
                 </Link>
@@ -82,7 +85,10 @@ const Header = () => {
                   className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
                   asChild
                 >
-                  <Link href="/admin/products">
+                  <Link
+                    href="/admin/products"
+                    onClick={() => setHidden(!hidden)}
+                  >
                     <PackageSearch size={18} />
                     <span className="block">Manage Products</span>
                   </Link>
@@ -93,7 +99,10 @@ const Header = () => {
                   className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
                   asChild
                 >
-                  <Link href="/admin/clients">
+                  <Link
+                    href="/admin/clients"
+                    onClick={() => setHidden(!hidden)}
+                  >
                     <UserRoundSearch size={18} />
                     <span className="block">Manage Clients</span>
                   </Link>
