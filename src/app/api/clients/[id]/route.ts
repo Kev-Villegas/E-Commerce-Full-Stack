@@ -1,7 +1,6 @@
 import { db } from "@/src/_lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { clientSchema } from "@/src/_utils/validationSchemas";
-import { convertBigIntToNumber } from "@/src/_utils/convertBigIntToNumber";
 
 export async function PATCH(
   request: NextRequest,
@@ -30,9 +29,7 @@ export async function PATCH(
       cuil: body.cuil,
     },
   });
-
-  const clientWithNumbers = convertBigIntToNumber(updatedClient);
-  return NextResponse.json(clientWithNumbers, { status: 200 });
+  return NextResponse.json(updatedClient, { status: 200 });
 }
 
 export async function DELETE(

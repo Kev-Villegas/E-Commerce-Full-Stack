@@ -75,26 +75,18 @@ export const clientSchema = z.object({
     .min(6, { message: "Address must be at least 6 characters!" })
     .max(255, { message: "Address must be at most 255 characters!" }),
   dni: z
-    .number({
+    .string({
       required_error: "DNI is required!",
+      invalid_type_error: "DNI must be a Text!",
     })
-    .positive({ message: "DNI must be a positive number!" })
-    .int({ message: "DNI must be an integer!" })
-    .refine(
-      (value) => {
-        const length = value.toString().length;
-        return length >= 7 && length <= 8;
-      },
-      { message: "DNI must be between 7 and 8 digits!" },
-    ),
+    .length(8, { message: "DNI must be exactly 8 characters" })
+    .refine((value) => /^\d+$/.test(value), {
+      message: "DNI must contain only digits!",
+    }),
   cuil: z
-    .number({
-      required_error: "CUIL is required!",
-      invalid_type_error: "CUIL must be a number!",
-    })
-    .positive({ message: "CUIL must be a positive number!" })
-    .int({ message: "CUIL must be an integer!" })
-    .refine((value) => value.toString().length === 11, {
-      message: "CUIL must be exactly 11 digits!",
+    .string()
+    .transform((value) => value.replace(/-/g, ""))
+    .refine((value) => /^\d{11}$/.test(value), {
+      message: "CUIL must be exactly 11 digits",
     }),
 });
