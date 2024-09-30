@@ -1,40 +1,44 @@
 "use client";
 
+import { useState } from "react";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import { SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { FormEventHandler, useState } from "react";
 
 const Search = () => {
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
-  const handleSearchSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!search) {
-      return;
-    }
+    if (!search) return;
 
     router.push(`/products?search=${search}`);
   };
 
   return (
-    <form className="flex gap-[5px]" onSubmit={handleSearchSubmit}>
-      <Input
-        placeholder="Find Products..."
-        className="border-[1px] border-zinc-700 bg-zinc-300"
-        onChange={handleChange}
-        value={search}
-      />
-      <Button size="icon" type="submit">
-        <SearchIcon size={20} />
-      </Button>
+    <form onSubmit={handleSearchSubmit} className="w-full">
+      <div className="relative">
+        <SearchIcon
+          className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors duration-200 ${
+            isSearchFocused ? "text-primary" : "text-muted-foreground"
+          }`}
+        />
+        <Input
+          type="search"
+          placeholder="Find products..."
+          className="w-full rounded-full border-2 border-zinc-300 py-2 pl-10 pr-4 transition-all duration-200 ease-in-out focus:border-primary"
+          value={search}
+          onChange={handleChange}
+          onFocus={() => setIsSearchFocused(true)}
+          onBlur={() => setIsSearchFocused(false)}
+        />
+      </div>
     </form>
   );
 };
