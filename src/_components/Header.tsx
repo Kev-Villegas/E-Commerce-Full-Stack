@@ -3,7 +3,9 @@
 import Link from "next/link";
 import Search from "./Search";
 import { useState } from "react";
+import SheetMenu from "./SheetMenu";
 import { Button } from "./ui/button";
+import { MenuIcon, Store, ShoppingBag, User } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -11,16 +13,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import {
-  HomeIcon,
-  MenuIcon,
-  PackageSearch,
-  Store,
-  Bitcoin,
-  ShoppingBag,
-  User,
-  UserRoundSearch,
-} from "lucide-react";
 
 const Header = () => {
   const [hidden, setHidden] = useState<boolean>(false);
@@ -60,54 +52,7 @@ const Header = () => {
             <SheetHeader>
               <SheetTitle className="text-left">Menu</SheetTitle>
             </SheetHeader>
-            <div className="flex justify-between pt-6">
-              <div className="flex items-center justify-center text-start">
-                <div className="ml-2 items-center">
-                  <Bitcoin />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Cardano Enjoyer</h3>
-                  <span className="block text-xs text-muted-foreground">
-                    Cardano@example.com
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="py-4">
-              <hr />
-            </div>
-            <div className="space-y-2">
-              <Button
-                variant="ghost"
-                className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
-                asChild
-              >
-                <Link href="/" onClick={toggleHidden}>
-                  <HomeIcon size={16} />
-                  <span className="block">Home</span>
-                </Link>
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
-                asChild
-              >
-                <Link href="/admin/products" onClick={toggleHidden}>
-                  <PackageSearch size={18} />
-                  <span className="block">Manage Products</span>
-                </Link>
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
-                asChild
-              >
-                <Link href="/admin/clients" onClick={toggleHidden}>
-                  <UserRoundSearch size={18} />
-                  <span className="block">Manage Clients</span>
-                </Link>
-              </Button>
-            </div>
+            <SheetMenu toggleHidden={toggleHidden} />
           </SheetContent>
         </Sheet>
       </div>
