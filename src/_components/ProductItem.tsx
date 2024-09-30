@@ -21,7 +21,7 @@ interface ProductItemProps {
 
 const ProductItem = ({ product }: ProductItemProps) => {
   return (
-    <Card className="mx-auto flex h-full w-full max-w-xs flex-col rounded-xl border border-white/25 bg-zinc-950">
+    <Card className="flex h-full w-full max-w-xs flex-col rounded-xl border border-white/25 bg-zinc-950">
       <CardHeader className="relative h-48 w-full overflow-hidden rounded-t-xl">
         <Link href={`/products/${product.id}`}>
           <Image
