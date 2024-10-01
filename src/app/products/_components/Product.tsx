@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { searchForProducts } from "../_action/search";
 import ProductItem from "@/src/_components/ProductItem";
+import NoProductsFound from "@/src/_components/NoProductsFound";
 
 const Products = () => {
   const searchParams = useSearchParams();
@@ -34,20 +35,19 @@ const Products = () => {
   }, [searchParams]);
 
   return (
-    <>
-      <div className="px-5 py-6">
-        <h2 className="mb-6 text-xl font-semibold">Products Found</h2>
-        {loading ? (
-          <Spinner />
-        ) : (
-          <div className="">
-            {products.map((product) => (
-              <ProductItem key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-      </div>
-    </>
+    <div className="px-5 py-6">
+      {loading ? (
+        <Spinner />
+      ) : products.length === 0 ? (
+        <NoProductsFound />
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product) => (
+            <ProductItem key={product.id} product={product} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 
