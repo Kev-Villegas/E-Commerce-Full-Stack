@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Input } from "./ui/input";
+import Search from "./Search";
 import { Button } from "./ui/button";
-import { PackageSearch, Search, Store } from "lucide-react";
+import { PackageSearch, Store } from "lucide-react";
 
 export default function Component() {
   return (
@@ -16,10 +16,7 @@ export default function Component() {
         The search term you entered did not match any products.
       </p>
       <div className="mb-6 flex w-full max-w-sm items-center space-x-2">
-        <Input type="search" placeholder="Try another search..." />
-        <Button type="submit" size="icon">
-          <Search className="h-4 w-4" />
-        </Button>
+        <Search placeholder="Try another search... " />
       </div>
       <Link href="/">
         <Button variant="outline" className="mb-8 bg-gray-300">

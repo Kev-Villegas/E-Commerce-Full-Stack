@@ -5,7 +5,11 @@ import { Input } from "./ui/input";
 import { SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const Search = () => {
+interface SearchProps {
+  placeholder?: string;
+}
+
+const Search = ({ placeholder }: SearchProps) => {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -31,7 +35,7 @@ const Search = () => {
         />
         <Input
           type="search"
-          placeholder="Find products..."
+          placeholder={placeholder}
           className="w-full rounded-full border-2 border-zinc-300 py-2 pl-10 pr-4 transition-all duration-200 ease-in-out focus:border-primary"
           value={search}
           onChange={handleChange}

@@ -29,7 +29,7 @@ const Header = () => {
         </Link>
       </div>
       <div className="w-full max-w-xl">
-        <Search />
+        <Search placeholder="Search Products..." />
       </div>
       <div className="flex items-center space-x-4">
         <Link href="/cart">
