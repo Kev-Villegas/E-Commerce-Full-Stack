@@ -17,7 +17,7 @@ This is a clothing e-commerce project developed using Next.js, TypeScript, React
 ## Installation
 1) Clone the repositorie
 ```bash
-git clone https://github.com/yourusername/clothing-ecommerce.git
+git clone https://github.com/yourusername/E-Commerce-Full-Stack.git
 cd clothing-ecommerce
 ```
 2) Install dependencies:
